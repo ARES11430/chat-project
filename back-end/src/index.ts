@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
-import { Server } from 'socket.io';
-import http from 'http';
+import express from 'express';
 import fs from 'fs';
+import http from 'http';
 import path from 'path';
+import { Server } from 'socket.io';
 
 const app = express();
 const server = http.createServer(app);
