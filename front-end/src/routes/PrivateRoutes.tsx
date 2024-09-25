@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import RootLayout from '../layouts/RootLayout';
+import PrivateLayout from '../layouts/PrivateLayout';
 
 const PrivateRoutes = () => {
 	const { isLoggedIn } = useAuth();
@@ -9,7 +9,7 @@ const PrivateRoutes = () => {
 		return <Navigate to='/login' replace />;
 	}
 
-	return <RootLayout />;
+	return <PrivateLayout />;
 };
 
 export default PrivateRoutes;
