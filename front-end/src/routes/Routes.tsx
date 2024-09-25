@@ -1,9 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../layouts/RootLayout';
 import App from '../pages/App';
-import ChatPage from '../pages/ChatPage';
+import PublicChatPage from '../pages/PublicChatPage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
+import PrivateRoutes from './PrivateRoutes';
 import ProtectedRoutes from './ProtectedRoutes';
 
 const router = createBrowserRouter([
@@ -18,9 +19,13 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <App /> },
 			{ path: 'login', element: <LoginPage /> },
-			{ path: 'register', element: <ProtectedRoutes element={<RegisterPage />} /> },
-			{ path: 'chat', element: <ProtectedRoutes element={<ChatPage />} /> }
+			{ path: 'register', element: <ProtectedRoutes element={<RegisterPage />} /> }
 		]
+	},
+	{
+		path: '/public-chat',
+		element: <PrivateRoutes />,
+		children: [{ index: true, element: <PublicChatPage /> }]
 	}
 ]);
 

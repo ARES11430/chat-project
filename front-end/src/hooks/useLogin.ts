@@ -23,7 +23,7 @@ const useLogin = (navigate: (path: string) => void) => {
 				setLastName(data.lastName);
 
 				if (message) {
-					navigate('/chat'); // * go to chat page after login
+					navigate('/public-chat'); // * go to chat page after login
 					setTimeout(() => {
 						toast.success('با موفقیت وارد شدید', { duration: 2000 });
 					}, 500);
