@@ -7,8 +7,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba(255, 255, 255, 0.1); /* semi-transparent background */
-	backdrop-filter: blur(1px); /* apply blur effect */
+	background: rgba(255, 255, 255, 0.5); /* semi-transparent background */
+	backdrop-filter: blur(3px); /* apply blur effect */
 	pointer-events: none; /* allows pointer events to pass through */
 	z-index: 9999; /* ensure it's on top of everything */
 }
