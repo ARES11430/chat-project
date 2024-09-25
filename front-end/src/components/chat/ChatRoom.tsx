@@ -37,6 +37,11 @@ const ChatRoom = () => {
 
 		setSocket(newSocket);
 
+		// * Listen for previous messages on initial connection
+		newSocket.on('previousMessages', (msgs: Message[]) => {
+			setMessages(msgs);
+		});
+
 		newSocket.on('chatMessage', (msg: Message) => {
 			setMessages((prevMessages) => [...prevMessages, msg]);
 		});

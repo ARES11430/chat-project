@@ -18,8 +18,28 @@ export const initSocket = (server: any) => {
 		}
 	});
 
-	io.on('connection', (socket) => {
+	io.on('connection', async (socket) => {
 		console.log('User connected:', socket.id);
+
+		// ? Send last 10 messages to the client with user info
+		try {
+			const lastMessages = await Message.find()
+				.sort({ timestamp: -1 })
+				.limit(10)
+				.populate('user', 'userName')
+				.lean(); // Convert to plain JavaScript objects
+
+			const formattedMessages = lastMessages.reverse().map((message) => ({
+				id: message._id,
+				userName: message.user?.userName || 'Unknown', // Fallback if user is null
+				message: message.message,
+				timestamp: message.timestamp
+			}));
+
+			socket.emit('previousMessages', formattedMessages); // Send formatted messages to the client
+		} catch (err) {
+			console.error('Error fetching last messages:', err);
+		}
 
 		// * Handle receiving and saving a chat message
 		socket.on('chatMessage', async (msg: ChatMessage) => {
