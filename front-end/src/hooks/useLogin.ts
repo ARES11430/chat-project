@@ -1,8 +1,9 @@
+import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { Login, LoginResponse } from '../models/auth';
 import { loginService } from '../services/authService';
 import { useAuthStore } from '../stores/authStore';
-import { Login, LoginResponse } from '../models/auth';
-import { useMutation } from '@tanstack/react-query';
+import { showErrorToast } from '../utils/toastUtil';
 
 const useLogin = (navigate: (path: string) => void) => {
 	const setIsLoggedIn = useAuthStore((s) => s.setIsLoggedIn);
@@ -31,7 +32,7 @@ const useLogin = (navigate: (path: string) => void) => {
 		},
 		onError: (error: any) => {
 			const errorMessage = error.response.data.error;
-			//showErrorToast(errorMessage);
+			showErrorToast(errorMessage);
 		}
 	});
 };
