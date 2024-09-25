@@ -15,7 +15,7 @@ const ProtectedRoutes = ({ element }: ProtectedRouteProps) => {
 
 	// if user is logged in navigate to chat page
 	if (isLoggedIn) {
-		return <Navigate to='/public-chat' replace />;
+		return <Navigate to='/chat-room' replace />;
 	}
 };
 

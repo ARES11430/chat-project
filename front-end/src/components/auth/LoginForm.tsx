@@ -80,16 +80,22 @@ const LoginForm = () => {
 					{errors.password && (
 						<p className='text-red-500 text-xs mt-2 ps-1'>{errors.password.message}</p>
 					)}
-					<label className='label text-xs font-bold mt-5'>
-						<Link to='/register' className='label-text-alt link link-hover'>
-							قبلا ثبت نام کرده اید؟
-						</Link>
-					</label>
 				</div>
 				<div className='form-control'>
-					<button type='submit' className='btn btn-primary' disabled={isSubmitting || isPending}>
+					<button
+						type='submit'
+						className='btn btn-primary mt-4'
+						disabled={isSubmitting || isPending}
+					>
 						{isSubmitting || isPending ? <Spinner /> : 'ورود'}
 					</button>
+				</div>
+				<div className='form-control mt-6'>
+					<label className='label text-xs font-bold'>
+						<Link to='/register' className='label-text-alt link link-hover'>
+							حساب کاربری ندارید؟ برای ساخت اینجا را کلیک کنید.
+						</Link>
+					</label>
 				</div>
 			</form>
 		</div>
