@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../layouts/RootLayout';
 import App from '../pages/App';
+import ChatPage from '../pages/ChatPage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
+import ProtectedRoutes from './ProtectedRoutes';
 
 const router = createBrowserRouter([
 	{
@@ -16,7 +18,8 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <App /> },
 			{ path: 'login', element: <LoginPage /> },
-			{ path: 'register', element: <RegisterPage /> }
+			{ path: 'register', element: <ProtectedRoutes element={<RegisterPage />} /> },
+			{ path: 'chat', element: <ProtectedRoutes element={<ChatPage />} /> }
 		]
 	}
 ]);
