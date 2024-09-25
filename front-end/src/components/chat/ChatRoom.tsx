@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { io, Socket } from 'socket.io-client';
 import useAuth from '../../hooks/useAuth';
+import userPic from './../../assets/user.svg';
 
 interface Message {
 	id: string;
@@ -77,10 +78,7 @@ const ChatRoom = () => {
 						>
 							<div className='chat-image avatar'>
 								<div className='w-10 rounded-full'>
-									<img
-										alt='User Avatar'
-										src='https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
-									/>
+									<img alt='User Avatar' src={userPic} />
 								</div>
 							</div>
 							<div className='chat-header'>
