@@ -13,7 +13,7 @@ const router = createBrowserRouter([
 		element: <RootLayout />,
 		errorElement: (
 			<div className='flex justify-center text-center font-bold text-4xl mt-10'>
-				Not found error sould be handled here
+				صفحه مورد نظر یافت نشد (404)
 			</div>
 		),
 		children: [
