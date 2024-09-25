@@ -51,11 +51,13 @@ const ChatRoom = () => {
 
 		// * Listen for previous messages on initial connection
 		newSocket.on('previousMessages', (msgs: Message[]) => {
-			setMessages(msgs);
+			// * Keep only the last 10 messages
+			setMessages(msgs.slice(-10));
 		});
 
+		// * Listen for new chat messages
 		newSocket.on('chatMessage', (msg: Message) => {
-			setMessages((prevMessages) => [...prevMessages, msg]);
+			setMessages((prevMessages) => [...prevMessages, msg].slice(-10));
 		});
 
 		// * Listen for online users update
