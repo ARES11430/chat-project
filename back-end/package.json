@@ -1,0 +1,24 @@
+{
+	"name": "chat-project",
+	"version": "1.0.0",
+	"main": "index.ts",
+	"scripts": {
+		"start": "node dist/index.js",
+		"dev": "nodemon src/index.ts",
+		"build": "tsc -p ."
+	},
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"devDependencies": {
+		"nodemon": "^3.0.3",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.3.3"
+	},
+	"dependencies": {
+		"express": "^4.20.0",
+		"http": "^0.0.1-security",
+		"mongoose": "^8.6.1",
+		"socket.io": "^4.7.5"
+	}
+}
