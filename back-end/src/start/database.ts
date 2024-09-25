@@ -17,6 +17,7 @@ const initDatabase = async () => {
 		if (dbString) {
 			await mongoose.connect(dbString);
 		}
+		console.log(`Connected to ${dbString}`);
 		return dbString;
 	} catch (error) {
 		return error;
