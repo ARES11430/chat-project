@@ -6,3 +6,5 @@ export const registerUserService = new APIClient<RegisterUser, RegisterUserRespo
 );
 
 export const loginService = new APIClient<Login, LoginResponse>('/auth/login');
+
+export const logOutService = new APIClient('/auth/logout');
