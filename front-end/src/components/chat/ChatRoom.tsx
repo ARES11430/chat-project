@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { io, Socket } from 'socket.io-client';
 import useAuth from '../../hooks/useAuth';
+import greenPulse from './../../assets/gifs/green-pulse.gif';
 import userPic from './../../assets/user.svg';
 
 interface Message {
@@ -9,6 +10,11 @@ interface Message {
 	userName: string;
 	message: string;
 	timestamp: Date;
+}
+
+interface OnlineUser {
+	id: string;
+	userName: string;
 }
 
 interface FormValues {
@@ -20,6 +26,7 @@ const ChatRoom = () => {
 
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
+	const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
 
 	const { register, handleSubmit, reset } = useForm<FormValues>();
 
@@ -30,6 +37,11 @@ const ChatRoom = () => {
 		newSocket.on('connect', () => {
 			console.log('Connected to socket:', newSocket.id);
 		});
+
+		// * Join the chat room with the username
+		if (userName) {
+			newSocket.emit('joinChat', userName);
+		}
 
 		newSocket.on('connect_error', (error) => {
 			console.log('Connection error:', error);
@@ -46,11 +58,16 @@ const ChatRoom = () => {
 			setMessages((prevMessages) => [...prevMessages, msg]);
 		});
 
+		// * Listen for online users update
+		newSocket.on('onlineUsers', (users: OnlineUser[]) => {
+			setOnlineUsers(users);
+		});
+
 		// * Disconnect when component unmounts
 		return () => {
 			newSocket.disconnect();
 		};
-	}, []);
+	}, [userName]);
 
 	const sendMessage = (data: FormValues) => {
 		if (socket && data.message.trim() !== '') {
@@ -73,7 +90,18 @@ const ChatRoom = () => {
 	};
 
 	return (
-		<div className='p-4 bg-base-300 min-h-screen flex flex-col justify-between'>
+		<div className='p-4 bg-base-300 rounded-lg flex flex-col justify-between'>
+			<div className='mb-4 p-2 bg-base-100 rounded-lg shadow-md'>
+				<h3 className='font-bold mb-2'>کاربران آنلاین</h3>
+				<ul className='space-y-1'>
+					{onlineUsers.map((user) => (
+						<li key={user.id} className='flex items-center gap-2'>
+							<img alt='User Avatar' src={greenPulse} className='w-5 h-5 rounded-full' />
+							<span>{user.userName}</span>
+						</li>
+					))}
+				</ul>
+			</div>
 			<div className='border rounded-lg shadow-md bg-base-100 p-4 flex-1 overflow-y-auto'>
 				<div>
 					{messages.map((msg, index) => (

@@ -10,6 +10,11 @@ type ChatMessage = {
 	message: string;
 };
 
+type UserType = {
+	id: string;
+	userName: string;
+};
+
 export const initSocket = (server: any) => {
 	const io = new Server(server, {
 		cors: {
@@ -17,6 +22,8 @@ export const initSocket = (server: any) => {
 			credentials: true
 		}
 	});
+
+	const onlineUsers: UserType[] = [];
 
 	io.on('connection', async (socket) => {
 		console.log('User connected:', socket.id);
@@ -78,8 +85,25 @@ export const initSocket = (server: any) => {
 			}
 		});
 
+		// ? Handle user joining
+		socket.on('joinChat', (userName: string) => {
+			const user = { id: socket.id, userName };
+			onlineUsers.push(user);
+
+			// * Emit updated online users list to all clients
+			io.emit('onlineUsers', onlineUsers);
+		});
+
 		socket.on('disconnect', () => {
 			console.log('User disconnected:', socket.id);
+
+			// ? Remove user from the online users list
+			const index = onlineUsers.findIndex((user) => user.id === socket.id);
+			if (index !== -1) {
+				onlineUsers.splice(index, 1);
+				// * Emit updated online users list to all clients
+				io.emit('onlineUsers', onlineUsers);
+			}
 		});
 	});
 };
