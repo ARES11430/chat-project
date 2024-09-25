@@ -4,6 +4,7 @@ import { io, Socket } from 'socket.io-client';
 import useAuth from '../../hooks/useAuth';
 
 interface Message {
+	id: string;
 	userName: string;
 	message: string;
 	timestamp: Date;
@@ -58,13 +59,27 @@ const ChatRoom = () => {
 		}
 	};
 
+	const formatDateTime = (date: Date) => {
+		const options: Intl.DateTimeFormatOptions = {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: 'numeric',
+			minute: 'numeric',
+			second: 'numeric',
+			hour12: true
+		};
+		return new Date(date).toLocaleString('fa-IR', options);
+	};
+
 	return (
 		<div className='p-4'>
 			<div className='chat-window border p-4 rounded'>
 				<div className='messages max-h-[400px] overflow-y-auto'>
 					{messages.map((msg, index) => (
 						<div key={index} className='message my-2'>
-							<span className='font-bold'>{msg.userName}:</span> {msg.message}
+							<div>{msg.id}:</div> {formatDateTime(msg.timestamp)}
+							<div className='font-bold'>{msg.userName}:</div> {msg.message}
 						</div>
 					))}
 				</div>

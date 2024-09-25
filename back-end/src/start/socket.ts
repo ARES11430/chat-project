@@ -5,6 +5,7 @@ import { User } from '../models/user';
 const frontURL = process.env.FRONT_URL;
 
 type ChatMessage = {
+	id: string;
 	userName: string;
 	message: string;
 };
@@ -33,6 +34,7 @@ export const initSocket = (server: any) => {
 
 				// ? Create a new message with the user's ObjectId
 				const newMessage = new Message({
+					id: socket.id,
 					user: user._id,
 					message: msg.message,
 					timestamp: new Date()
@@ -46,6 +48,7 @@ export const initSocket = (server: any) => {
 
 				// * Broadcast the new message to all connected clients
 				io.emit('chatMessage', {
+					id: populatedMessage.id,
 					userName: populatedMessage.user.userName,
 					message: populatedMessage.message,
 					timestamp: populatedMessage.timestamp

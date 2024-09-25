@@ -2,12 +2,17 @@ import mongoose from 'mongoose';
 import { IUser } from './user';
 
 export type IMessage = {
+	id: string;
 	user: IUser;
 	message: string;
 	timestamp: Date;
 };
 
 const messageSchema = new mongoose.Schema<IMessage>({
+	id: {
+		type: String,
+		required: [true, 'Message is required']
+	},
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User',
