@@ -59,33 +59,48 @@ const ChatRoom = () => {
 		}
 	};
 
-	const formatDateTime = (date: Date) => {
-		const options: Intl.DateTimeFormatOptions = {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			hour: 'numeric',
-			minute: 'numeric',
-			second: 'numeric',
-			hour12: true
-		};
-		return new Date(date).toLocaleString('fa-IR', options);
+	const formatHour = (date: Date) => {
+		return new Date(date).toLocaleTimeString('fa-IR', {
+			hour: '2-digit',
+			minute: '2-digit'
+		});
 	};
 
 	return (
-		<div className='p-4'>
-			<div className='chat-window border p-4 rounded'>
-				<div className='messages max-h-[400px] overflow-y-auto'>
+		<div className='p-4 bg-base-300 min-h-screen flex flex-col justify-between'>
+			<div className='border rounded-lg shadow-md bg-base-100 p-4 flex-1 overflow-y-auto'>
+				<div>
 					{messages.map((msg, index) => (
-						<div key={index} className='message my-2'>
-							<div>{msg.id}:</div> {formatDateTime(msg.timestamp)}
-							<div className='font-bold'>{msg.userName}:</div> {msg.message}
+						<div
+							key={index}
+							className={`chat ${msg.userName === userName ? 'chat-start' : 'chat-end'} my-2`}
+						>
+							<div className='chat-image avatar'>
+								<div className='w-10 rounded-full'>
+									<img
+										alt='User Avatar'
+										src='https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
+									/>
+								</div>
+							</div>
+							<div className='chat-header'>
+								{msg.userName}
+								<time className='text-xs opacity-50 ml-2'>{formatHour(msg.timestamp)}</time>
+							</div>
+							<div
+								className={`chat-bubble ${
+									msg.userName === userName ? 'chat-bubble-success' : 'chat-bubble-info'
+								}`}
+							>
+								{msg.message}
+							</div>
+							<div className='chat-footer opacity-50'>Delivered</div>
 						</div>
 					))}
 				</div>
 			</div>
-			<form onSubmit={handleSubmit(sendMessage)} className='mt-4 flex gap-1'>
-				<button type='submit' className='btn btn-secondary ml-2 px-4 py-2'>
+			<form onSubmit={handleSubmit(sendMessage)} className='mt-4 flex gap-2'>
+				<button type='submit' className='btn btn-secondary px-4 py-2'>
 					فرستادن
 				</button>
 				<input
