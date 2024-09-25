@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../layouts/RootLayout';
 import App from '../pages/App';
-import PublicChatPage from '../pages/PublicChatPage';
+import ChatRoomPage from '../pages/ChatRoomPage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import PrivateRoutes from './PrivateRoutes';
@@ -23,9 +23,9 @@ const router = createBrowserRouter([
 		]
 	},
 	{
-		path: '/public-chat',
+		path: '/chat-room',
 		element: <PrivateRoutes />,
-		children: [{ index: true, element: <PublicChatPage /> }]
+		children: [{ index: true, element: <ChatRoomPage /> }]
 	}
 ]);
 
