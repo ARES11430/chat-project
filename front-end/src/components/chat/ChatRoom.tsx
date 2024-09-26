@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { io, Socket } from 'socket.io-client';
 import useAuth from '../../hooks/useAuth';
@@ -27,6 +27,8 @@ const ChatRoom = () => {
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
+
+	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
 	const { register, handleSubmit, reset } = useForm<FormValues>();
 
@@ -61,6 +63,9 @@ const ChatRoom = () => {
 		// * Listen for new chat messages
 		newSocket.on('chatMessage', (msg: Message) => {
 			setMessages((prevMessages) => [...prevMessages, msg].slice(-10));
+
+			// * Scroll to the bottom whenever a new message arrives
+			messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 		});
 
 		// * Listen for online users update
@@ -95,7 +100,7 @@ const ChatRoom = () => {
 	};
 
 	return (
-		<div className='p-4 bg-base-300 rounded-lg flex flex-col justify-between'>
+		<div className='h-screen p-4 bg-base-300 rounded-lg flex flex-col'>
 			<div className='border mb-4 p-2 bg-base-100 rounded-lg shadow-md'>
 				<h3 className='font-bold mb-2'>کاربران آنلاین</h3>
 				<ul className='space-y-1'>
@@ -133,6 +138,7 @@ const ChatRoom = () => {
 							<div className='chat-footer opacity-50'>Delivered</div>
 						</div>
 					))}
+					<div ref={messagesEndRef}></div>
 				</div>
 			</div>
 			<form onSubmit={handleSubmit(sendMessage)} className='mt-4 flex gap-2'>
