@@ -19,8 +19,10 @@ export async function createPrivateChat(req: Request, res: Response) {
 		participants: { $all: [userId1, userId2] }
 	});
 
+	const participants = [userId1, userId2];
+
 	if (chat) {
-		return res.status(200).json({ chatId: chat._id, participants: chat.participants });
+		return res.status(200).json({ chatId: chat._id, participants });
 	}
 
 	chat = new PrivateChat({
@@ -29,5 +31,5 @@ export async function createPrivateChat(req: Request, res: Response) {
 	});
 	await chat.save();
 
-	return res.status(200).json({ chatId: chat._id, participants: chat.participants });
+	return res.status(200).json({ chatId: chat._id, participants });
 }
