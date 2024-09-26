@@ -81,9 +81,18 @@ export const publicChatHandler = (io: Server, socket: Socket) => {
 	// * Handle user joining public chat
 	socket.on('joinChat', (userName: string) => {
 		const user = { id: socket.id, userName };
-		onlineUsers.push(user);
 
-		// ? Emit updated online users list to all clients
+		// ? Check if the user is already in the online users list
+		const existingUserIndex = onlineUsers.findIndex((u) => u.userName === userName);
+
+		if (existingUserIndex === -1) {
+			onlineUsers.push(user);
+		} else {
+			// ? If user exists, update their socket ID
+			onlineUsers[existingUserIndex].id = socket.id;
+		}
+
+		// * Emit updated online users list to all clients
 		io.emit('onlineUsers', onlineUsers);
 	});
 
