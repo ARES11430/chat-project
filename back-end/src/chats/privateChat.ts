@@ -38,8 +38,14 @@ export const privateChatHandler = (io: Server, socket: Socket) => {
 				.slice('messages', -10) // Get the last 10 messages
 				.exec();
 
+			const formattedMessages = chat?.messages.reverse().map((message) => ({
+				userName: message.user?.userName || 'Unknown',
+				message: message.message,
+				timestamp: message.timestamp
+			}));
+
 			// * Send the last 10 messages to the client
-			socket.emit('previousMessages', chat?.messages || []);
+			socket.emit('previousMessages', formattedMessages);
 
 			// * Notify the user of the successful join
 			socket.emit('privateChatJoined', roomId);
