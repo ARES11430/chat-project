@@ -42,11 +42,11 @@ export async function login(req: Request, res: Response) {
 		maxAge: tenYears
 	});
 
-	const { name, lastName } = user;
+	const { _id, name, lastName } = user;
 
 	return res.status(200).send({
 		message: 'login successfull',
-		data: { userName, name, lastName }
+		data: { userId: _id, userName, name, lastName }
 	});
 }
 

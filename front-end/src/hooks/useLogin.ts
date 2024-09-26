@@ -8,6 +8,7 @@ import { showErrorToast } from '../utils/toastUtil';
 const useLogin = (navigate: (path: string) => void) => {
 	const setIsLoggedIn = useAuthStore((s) => s.setIsLoggedIn);
 	const setUserName = useAuthStore((s) => s.setUserName);
+	const setUserId = useAuthStore((s) => s.setUserId);
 	const setName = useAuthStore((s) => s.setName);
 	const setLastName = useAuthStore((s) => s.setLastName);
 
@@ -19,6 +20,7 @@ const useLogin = (navigate: (path: string) => void) => {
 			setTimeout(() => {
 				setIsLoggedIn(true);
 				setUserName(data.userName);
+				setUserId(data.userId);
 				setName(data.name);
 				setLastName(data.lastName);
 

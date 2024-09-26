@@ -6,10 +6,12 @@ const SECRET_KEY = import.meta.env.VITE_CRYPTO_SECRET_KEY;
 interface AuthStore {
 	isLoggedIn: boolean;
 	userName: string;
+	userId: string;
 	name: string;
 	lastName: string;
 	setIsLoggedIn: (loggedIn: boolean) => void;
-	setUserName: (email: string) => void;
+	setUserName: (userName: string) => void;
+	setUserId: (userId: string) => void;
 	setName: (name: string) => void;
 	setLastName: (lastName: string) => void;
 }
@@ -26,6 +28,7 @@ const decrypt = (ciphertext: string) => {
 export const useAuthStore = create<AuthStore>((set) => ({
 	isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
 	userName: localStorage.getItem('userName') ? decrypt(localStorage.getItem('userName') || '') : '',
+	userId: localStorage.getItem('userId') ? decrypt(localStorage.getItem('userId') || '') : '',
 	name: localStorage.getItem('name') ? decrypt(localStorage.getItem('name') || '') : '',
 	lastName: localStorage.getItem('lastName') ? decrypt(localStorage.getItem('lastName') || '') : '',
 	setIsLoggedIn: (loggedIn: boolean) => {
@@ -38,9 +41,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
 		localStorage.setItem('name', encryptedName);
 	},
 	setUserName: (userName: string) => {
-		const encryptedEmail = encrypt(userName);
+		const encryptedUserName = encrypt(userName);
 		set({ userName });
-		localStorage.setItem('userName', encryptedEmail);
+		localStorage.setItem('userName', encryptedUserName);
+	},
+	setUserId: (userId: string) => {
+		const encryptedUserId = encrypt(userId);
+		set({ userId });
+		localStorage.setItem('userId', encryptedUserId);
 	},
 	setLastName: (lastName: string) => {
 		const encryptedLastName = encrypt(lastName);

@@ -7,6 +7,7 @@ export interface LoginResponse {
 	message: string;
 	data: {
 		userName: string;
+		userId: string;
 		name: string;
 		lastName: string;
 	};
