@@ -13,7 +13,7 @@ const Users = () => {
 	const navigate = useNavigate();
 	const { mutate: createOrJoinPrivateChat } = useCreatePrivateChat(navigate);
 
-	const { userId: userId1 } = useAuth();
+	const { userId: userId1, userName } = useAuth();
 
 	let emptyError = '';
 
@@ -33,6 +33,8 @@ const Users = () => {
 		createOrJoinPrivateChat({ userId1, userId2 });
 	};
 
+	const users = data?.data.users.filter((user) => user._id !== userId1);
+
 	return (
 		<>
 			{emptyError && <p className='font-bold text-center mt-5'>{emptyError}</p>}
@@ -48,9 +50,13 @@ const Users = () => {
 							<h1 className={'font-bold text-2xl opacity-100 w-auto'}>خانه</h1>
 						</div>
 					</NavLink>
-					<h2 className={'font-bold text-3xl pr-3 mt-24'}>لیست کاربران</h2>
-					<ul className='flex flex-col gap-3 mt-7 pr-3'>
-						{data?.data.users.map((user) => (
+					<div className='pr-3 mt-24'>
+						<h2 className='font-bold text-3xl '>نام کاربری شما</h2>
+						<p className='mt-2'>{userName}</p>
+					</div>
+					<h2 className='font-bold text-3xl pr-3 mt-7'>لیست کاربران</h2>
+					<ul className='flex flex-col gap-3 mt-2 pr-3'>
+						{users?.map((user) => (
 							<li
 								key={user._id}
 								onClick={() => openPrivateChat(user._id)}
