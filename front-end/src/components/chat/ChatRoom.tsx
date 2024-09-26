@@ -36,6 +36,9 @@ const ChatRoom = () => {
 
 		newSocket.on('connect', () => {
 			console.log('Connected to socket:', newSocket.id);
+
+			// * Request previous messages from the server on connection
+			newSocket.emit('getPreviousMessages');
 		});
 
 		// * Join the chat room with the username
@@ -93,7 +96,7 @@ const ChatRoom = () => {
 
 	return (
 		<div className='p-4 bg-base-300 rounded-lg flex flex-col justify-between'>
-			<div className='mb-4 p-2 bg-base-100 rounded-lg shadow-md'>
+			<div className='border mb-4 p-2 bg-base-100 rounded-lg shadow-md'>
 				<h3 className='font-bold mb-2'>کاربران آنلاین</h3>
 				<ul className='space-y-1'>
 					{onlineUsers.map((user) => (
