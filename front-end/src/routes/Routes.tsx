@@ -41,7 +41,7 @@ const router = createBrowserRouter([
 				<PrivateRoutes />
 			</ErrorBoundary>
 		),
-		children: [{ index: false }, { path: ':userId', element: <PrivateChatPage /> }]
+		children: [{ index: false }, { path: ':chatId', element: <PrivateChatPage /> }]
 	}
 ]);
 

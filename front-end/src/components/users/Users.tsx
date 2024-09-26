@@ -1,12 +1,20 @@
 import { FaHome } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import useUsers from '../../hooks/useUsers';
 import { showErrorToast } from '../../utils/toastUtil';
 import Spinner from '../Spinner';
 import userPic from './../../assets/user.svg';
+import useAuth from '../../hooks/useAuth';
+import usePrivateChatStore from '../../stores/privateChatStore';
+import useCreatePrivateChat from '../../hooks/useCreatePrivateChat';
 
 const Users = () => {
 	const { data, isError, error, isLoading } = useUsers();
+
+	const navigate = useNavigate();
+	const { mutate: createOrJoinPrivateChat } = useCreatePrivateChat(navigate);
+
+	const { userId: userId1 } = useAuth();
 
 	let emptyError = '';
 
@@ -21,6 +29,10 @@ const Users = () => {
 	}
 
 	if (isLoading) return <Spinner />;
+
+	const openPrivateChat = async (userId2: string) => {
+		createOrJoinPrivateChat({ userId1, userId2 });
+	};
 
 	return (
 		<>
@@ -40,7 +52,11 @@ const Users = () => {
 					<h2 className={'font-bold text-3xl pr-3 mt-24'}>لیست کاربران</h2>
 					<ul className='flex flex-col gap-3 mt-7 pr-3'>
 						{data?.data.users.map((user) => (
-							<li key={user._id} className='flex items-center gap-2'>
+							<li
+								key={user._id}
+								onClick={() => openPrivateChat(user._id)}
+								className='flex items-center gap-2'
+							>
 								<img alt='User Avatar' src={userPic} className='w-6 h-6 rounded-full' />
 								<span>{user.userName}</span>
 							</li>
