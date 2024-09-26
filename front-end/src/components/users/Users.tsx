@@ -6,6 +6,7 @@ import useUsers from '../../hooks/useUsers';
 import { showErrorToast } from '../../utils/toastUtil';
 import Spinner from '../Spinner';
 import userPic from './../../assets/user.svg';
+import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 
 const Users = () => {
 	const { data, isError, error, isLoading } = useUsers();
@@ -48,6 +49,12 @@ const Users = () => {
 						<div className='flex items-center pr-3'>
 							<FaHome className='text-xl md:text-3xl ml-3' />
 							<h1 className={'font-bold text-2xl opacity-100 w-auto'}>خانه</h1>
+						</div>
+					</NavLink>
+					<NavLink to='/chat-room'>
+						<div className='flex items-center mt-3 pr-3'>
+							<IoChatbubbleEllipsesOutline className='text-xl md:text-3xl ml-3' />
+							<h1 className={'font-bold text-2xl opacity-100 w-auto'}>چت روم</h1>
 						</div>
 					</NavLink>
 					<div className='pr-3 mt-24'>
