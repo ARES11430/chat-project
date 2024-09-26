@@ -33,7 +33,7 @@ export async function getUsers(req: Request, res: Response) {
 	// ? check if user is already registered
 	let users = await User.find().select('_id name lastName userName createdAt');
 	if (!users || users.length === 0)
-		return res.status(400).send({ error: 'there is no user is database' });
+		return res.status(404).send({ error: 'there is no user is database' });
 
 	return res.status(201).send({
 		data: {
