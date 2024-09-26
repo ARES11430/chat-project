@@ -1,12 +1,11 @@
 import { FaHome } from 'react-icons/fa';
 import { NavLink, useNavigate } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
+import useCreatePrivateChat from '../../hooks/useCreatePrivateChat';
 import useUsers from '../../hooks/useUsers';
 import { showErrorToast } from '../../utils/toastUtil';
 import Spinner from '../Spinner';
 import userPic from './../../assets/user.svg';
-import useAuth from '../../hooks/useAuth';
-import usePrivateChatStore from '../../stores/privateChatStore';
-import useCreatePrivateChat from '../../hooks/useCreatePrivateChat';
 
 const Users = () => {
 	const { data, isError, error, isLoading } = useUsers();

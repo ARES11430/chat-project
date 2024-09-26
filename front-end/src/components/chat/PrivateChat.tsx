@@ -43,7 +43,12 @@ const PrivateChat = () => {
 			console.log(`${newSocket.id} has joined the private chat ${chatId}`);
 		});
 
-		// * Listen for private messages
+		// * Listen for the previous messages from the server
+		newSocket.on('previousMessages', (previousMessages: Message[]) => {
+			setMessages(previousMessages);
+		});
+
+		// * Listen for new private messages
 		newSocket.on('privateMessage', (msg: Message) => {
 			setMessages((prevMessages) => [...prevMessages, msg]);
 		});

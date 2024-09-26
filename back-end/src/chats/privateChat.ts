@@ -32,6 +32,15 @@ export const privateChatHandler = (io: Server, socket: Socket) => {
 			socket.join(roomId);
 			console.log(`User ${socket.id} joined or created private chat room: ${roomId}`);
 
+			// * Fetch the last 10 messages from this chat room
+			const chat = await PrivateChat.findById(roomId)
+				.populate('messages.user', 'userName') // Populate the user details
+				.slice('messages', -10) // Get the last 10 messages
+				.exec();
+
+			// * Send the last 10 messages to the client
+			socket.emit('previousMessages', chat?.messages || []);
+
 			// * Notify the user of the successful join
 			socket.emit('privateChatJoined', roomId);
 		} catch (err) {
