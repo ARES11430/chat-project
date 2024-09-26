@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import chatSvg from '../assets/chat.svg';
 
 const App = () => {
@@ -14,6 +15,9 @@ const App = () => {
 						<p className='py-6'>
 							لطفا برای ادامه حساب کاربری بسازید و یا وارد حساب کاربری خود شوید
 						</p>
+						<Link to={'chat-room'} className='py-6 underline text-orange-500'>
+							ورود به چت روم عمومی!
+						</Link>
 					</div>
 				</div>
 			</div>
