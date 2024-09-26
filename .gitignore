@@ -8,3 +8,5 @@
 /front-end/dist-ssr
 /front-end/*.local
 /front-end/.env
+back-end/.env
+back-end/.env

@@ -1,6 +1,12 @@
+import axios from 'axios';
 import { Server, Socket } from 'socket.io';
 import { PrivateChat } from '../models/privateChat';
 import { User } from '../models/user';
+
+type CreateChatPayload = {
+	userId1: string;
+	userId2: string;
+};
 
 type PrivateChatMessage = {
 	roomId: string;
@@ -8,13 +14,29 @@ type PrivateChatMessage = {
 	message: string;
 };
 
+const BACK_END_ENDPOINT = process.env.BACK_END_URL;
+
 export const privateChatHandler = (io: Server, socket: Socket) => {
 	console.log('User connected to private chat:', socket.id);
 
-	// * Handle joining a private chat room
-	socket.on('joinPrivateChat', async ({ roomId }) => {
-		socket.join(roomId);
-		console.log(`User ${socket.id} joined private chat room: ${roomId}`);
+	// * Handle joining or creating a private chat room
+	socket.on('createOrJoinPrivateChat', async ({ userId1, userId2 }: CreateChatPayload) => {
+		try {
+			const { data } = await axios.post(`${BACK_END_ENDPOINT}/chats/create-private-chat`, {
+				userId1,
+				userId2
+			});
+			const roomId = data.chatId;
+
+			// * Join the specific chat room
+			socket.join(roomId);
+			console.log(`User ${socket.id} joined or created private chat room: ${roomId}`);
+
+			// * Notify the user of the successful join
+			socket.emit('privateChatJoined', { roomId });
+		} catch (err) {
+			console.error('Error joining or creating private chat:', err);
+		}
 	});
 
 	socket.on('privateMessage', async (msg: PrivateChatMessage) => {
