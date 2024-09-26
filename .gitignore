@@ -1,5 +1,6 @@
 /back-end/node_modules
 /back-end/.env
+back-end/.env
 
 
 # front-end
@@ -8,6 +9,3 @@
 /front-end/dist-ssr
 /front-end/*.local
 /front-end/.env
-back-end/.env
-back-end/.env
-back-end/.env
