@@ -1,12 +1,14 @@
-# online chat application
+# Online-Chat Application
 
-before running make sure to install Mongodb and nodejs on system.
+Before running make sure to install Mongodb and nodejs on system.
 
-to run back-end server go to the back-end-end directory simply run:
-npm run dev
+To run back-end server go to the back-end-end directory simply run:
 
-to run front-end server go to the front-end directory simply run:
-npm run dev
+    npm run dev
+
+To run front-end server go to the front-end directory simply run:
+
+    npm run dev
 
 # ENV variables for back-end:
 
