@@ -4,10 +4,14 @@ Before running make sure to install Mongodb and nodejs on system.
 
 To run back-end server go to the back-end-end directory simply run:
 
+    npm install
+    
     npm run dev
 
 To run front-end server go to the front-end directory simply run:
 
+    npm install
+    
     npm run dev
 
 # ENV variables for back-end:
