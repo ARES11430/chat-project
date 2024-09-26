@@ -22,7 +22,7 @@ export const privateChatHandler = (io: Server, socket: Socket) => {
 	// * Handle joining or creating a private chat room
 	socket.on('createOrJoinPrivateChat', async ({ userId1, userId2 }: CreateChatPayload) => {
 		try {
-			const { data } = await axios.post(`${BACK_END_ENDPOINT}/chats/create-private-chat`, {
+			const { data } = await axios.post(`${BACK_END_ENDPOINT}chats/create-private-chat`, {
 				userId1,
 				userId2
 			});
@@ -33,7 +33,7 @@ export const privateChatHandler = (io: Server, socket: Socket) => {
 			console.log(`User ${socket.id} joined or created private chat room: ${roomId}`);
 
 			// * Notify the user of the successful join
-			socket.emit('privateChatJoined', { roomId });
+			socket.emit('privateChatJoined', roomId);
 		} catch (err) {
 			console.error('Error joining or creating private chat:', err);
 		}
