@@ -1,16 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 import useAuth from '../../hooks/useAuth';
 import userPic from './../../assets/user.svg';
-import usePrivateChatStore from '../../stores/privateChatStore';
 
 interface Message {
 	id: string;
 	userName: string;
 	message: string;
 	timestamp: Date;
+}
+
+interface Participant {
+	id: string;
+	userName: string;
 }
 
 interface FormValues {
@@ -20,11 +24,14 @@ interface FormValues {
 const PrivateChat = () => {
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
+	const [participants, setParticipants] = useState<Participant[]>([]);
 
 	const { chatId } = useParams<{ chatId: string }>();
 	const { userName, userId } = useAuth();
 
 	const { register, handleSubmit, reset } = useForm<FormValues>();
+
+	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		// * Connect to the Socket.IO server
@@ -45,9 +52,15 @@ const PrivateChat = () => {
 			setMessages(previousMessages);
 		});
 
+		newSocket.on('participants', (participants: Participant[]) => {
+			setParticipants(participants);
+		});
+
 		// * Listen for new private messages
 		newSocket.on('privateMessage', (msg: Message) => {
 			setMessages((prevMessages) => [...prevMessages, msg]);
+			// Scroll to the bottom whenever a new message arrives
+			messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 		});
 
 		// * Disconnect socket on component unmount
@@ -77,8 +90,15 @@ const PrivateChat = () => {
 		});
 	};
 
+	const chatPartner = participants.find((p) => p.userName !== userName);
+	const chatToYourself = participants.find((c) => c.userName === userName);
+
 	return (
-		<div className='p-4 bg-base-300 rounded-lg flex flex-col justify-between'>
+		<div className='h-screen p-4 bg-base-300 rounded-lg flex flex-col'>
+			<div className='border mb-4 p-2 bg-base-100 rounded-lg shadow-md'>
+				{chatToYourself && !chatPartner && <p>در حال چت کردن با خودتون هستید</p>}
+				{chatPartner && <p>در حال چت کردن با : {chatPartner.userName}</p>}
+			</div>
 			<div className='border rounded-lg shadow-md bg-base-100 p-4 flex-1 overflow-y-auto'>
 				<div>
 					{messages.map((msg, index) => (
@@ -105,12 +125,11 @@ const PrivateChat = () => {
 							<div className='chat-footer opacity-50'>Delivered</div>
 						</div>
 					))}
+					<div ref={messagesEndRef}></div>{' '}
+					{/* This element is used to scroll to the latest message */}
 				</div>
 			</div>
 			<form onSubmit={handleSubmit(sendMessage)} className='mt-4 flex gap-2'>
-				<button type='submit' className='btn btn-secondary px-4 py-2'>
-					فرستادن
-				</button>
 				<input
 					type='text'
 					autoComplete='off'
@@ -118,6 +137,9 @@ const PrivateChat = () => {
 					className='flex-1 border rounded p-2'
 					placeholder='پیام خود را بنویسید...'
 				/>
+				<button type='submit' className='btn btn-secondary px-4 py-2'>
+					فرستادن
+				</button>
 			</form>
 		</div>
 	);

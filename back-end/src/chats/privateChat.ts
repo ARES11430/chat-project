@@ -14,12 +14,13 @@ export const privateChatHandler = (io: Server, socket: Socket) => {
 	// * Handle joining or creating a private chat room
 	socket.on('joinPrivateChat', async (chatId) => {
 		try {
-			// Join the specific chat room by chatId
+			// * Join the specific chat room by chatId
 			socket.join(chatId);
 			console.log(`User ${socket.id} joined private chat room: ${chatId}`);
 
-			// Fetch the last 10 messages from this chat room
+			// ? Fetch the last 10 messages from this chat room
 			const chat = await PrivateChat.findById(chatId)
+				.populate('participants', 'userName')
 				.populate('messages.user', 'userName')
 				.slice('messages', -10)
 				.exec();
@@ -30,8 +31,9 @@ export const privateChatHandler = (io: Server, socket: Socket) => {
 				timestamp: message.timestamp
 			}));
 
-			// Send the last 10 messages to the client
+			// * Send the last 10 messages to the client
 			socket.emit('previousMessages', formattedMessages);
+			socket.emit('participants', chat?.participants);
 		} catch (err) {
 			console.error('Error joining private chat:', err);
 		}
