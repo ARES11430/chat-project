@@ -8,6 +8,7 @@ import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import PrivateRoutes from './PrivateRoutes';
 import ProtectedRoutes from './ProtectedRoutes';
+import PrivateChatPage from '../pages/PrivateChatPage';
 
 const router = createBrowserRouter([
 	{
@@ -32,6 +33,15 @@ const router = createBrowserRouter([
 			</ErrorBoundary>
 		),
 		children: [{ index: true, element: <ChatRoomPage /> }]
+	},
+	{
+		path: '/private-chat',
+		element: (
+			<ErrorBoundary>
+				<PrivateRoutes />
+			</ErrorBoundary>
+		),
+		children: [{ index: false }, { path: ':chatId', element: <PrivateChatPage /> }]
 	}
 ]);
 
