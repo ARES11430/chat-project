@@ -20,37 +20,28 @@ export const privateChatHandler = (io: Server, socket: Socket) => {
 	console.log('User connected to private chat:', socket.id);
 
 	// * Handle joining or creating a private chat room
-	socket.on('createOrJoinPrivateChat', async ({ userId1, userId2 }: CreateChatPayload) => {
+	socket.on('joinPrivateChat', async (chatId) => {
 		try {
-			const { data } = await axios.post(`${BACK_END_ENDPOINT}chats/create-private-chat`, {
-				userId1,
-				userId2
-			});
-			const roomId = data.chatId;
+			// Join the specific chat room by chatId
+			socket.join(chatId);
+			console.log(`User ${socket.id} joined private chat room: ${chatId}`);
 
-			// * Join the specific chat room
-			socket.join(roomId);
-			console.log(`User ${socket.id} joined or created private chat room: ${roomId}`);
-
-			// * Fetch the last 10 messages from this chat room
-			const chat = await PrivateChat.findById(roomId)
-				.populate('messages.user', 'userName') // Populate the user details
-				.slice('messages', -10) // Get the last 10 messages
+			// Fetch the last 10 messages from this chat room
+			const chat = await PrivateChat.findById(chatId)
+				.populate('messages.user', 'userName')
+				.slice('messages', -10)
 				.exec();
 
-			const formattedMessages = chat?.messages.reverse().map((message) => ({
+			const formattedMessages = chat?.messages.map((message) => ({
 				userName: message.user?.userName || 'Unknown',
 				message: message.message,
 				timestamp: message.timestamp
 			}));
 
-			// * Send the last 10 messages to the client
+			// Send the last 10 messages to the client
 			socket.emit('previousMessages', formattedMessages);
-
-			// * Notify the user of the successful join
-			socket.emit('privateChatJoined', roomId);
 		} catch (err) {
-			console.error('Error joining or creating private chat:', err);
+			console.error('Error joining private chat:', err);
 		}
 	});
 

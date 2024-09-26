@@ -22,10 +22,7 @@ const PrivateChat = () => {
 	const [messages, setMessages] = useState<Message[]>([]);
 
 	const { chatId } = useParams<{ chatId: string }>();
-	const userId1 = usePrivateChatStore((s) => s.userId1);
-	const userId2 = usePrivateChatStore((s) => s.userId2);
-
-	const { userName } = useAuth();
+	const { userName, userId } = useAuth();
 
 	const { register, handleSubmit, reset } = useForm<FormValues>();
 
@@ -35,8 +32,8 @@ const PrivateChat = () => {
 		setSocket(newSocket);
 
 		// * Join the private chat room
-		if (userId1 && userId2) {
-			newSocket.emit('createOrJoinPrivateChat', { userId1, userId2 });
+		if (chatId) {
+			newSocket.emit('joinPrivateChat', chatId);
 		}
 
 		newSocket.on('privateChatJoined', () => {
@@ -57,14 +54,14 @@ const PrivateChat = () => {
 		return () => {
 			newSocket.disconnect();
 		};
-	}, [userId1, userId2]);
+	}, [chatId]);
 
 	const sendMessage = (data: FormValues) => {
 		if (socket && data.message.trim() !== '') {
 			// * Emit message to the server
 			socket.emit('privateMessage', {
 				roomId: chatId,
-				senderId: userId1,
+				senderId: userId,
 				message: data.message
 			});
 
