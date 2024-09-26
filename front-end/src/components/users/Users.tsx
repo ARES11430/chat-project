@@ -54,7 +54,7 @@ const Users = () => {
 							<li
 								key={user._id}
 								onClick={() => openPrivateChat(user._id)}
-								className='flex items-center gap-2'
+								className='flex items-center gap-2 hover:cursor-pointer hover:underline hover:text-info'
 							>
 								<img alt='User Avatar' src={userPic} className='w-6 h-6 rounded-full' />
 								<span>{user.userName}</span>
