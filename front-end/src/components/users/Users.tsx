@@ -2,7 +2,8 @@ import { FaHome } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import useUsers from '../../hooks/useUsers';
 import { showErrorToast } from '../../utils/toastUtil';
-import Loading from '../Loading';
+import Spinner from '../Spinner';
+import userPic from './../../assets/user.svg';
 
 const Users = () => {
 	const { data, isError, error, isLoading } = useUsers();
@@ -19,7 +20,7 @@ const Users = () => {
 		}
 	}
 
-	if (isLoading) return <Loading />;
+	if (isLoading) return <Spinner />;
 
 	return (
 		<>
@@ -39,7 +40,10 @@ const Users = () => {
 					<h2 className={'font-bold text-3xl pr-3 mt-24'}>لیست کاربران</h2>
 					<ul className='flex flex-col gap-3 mt-7 pr-3'>
 						{data?.data.users.map((user) => (
-							<li key={user._id}>{user.userName}</li>
+							<li key={user._id} className='flex items-center gap-2'>
+								<img alt='User Avatar' src={userPic} className='w-6 h-6 rounded-full' />
+								<span>{user.userName}</span>
+							</li>
 						))}
 					</ul>
 				</div>
