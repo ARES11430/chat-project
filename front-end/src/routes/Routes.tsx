@@ -1,7 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
+import ErrorBoundary from '../components/ErrorBoundary';
 import RootLayout from '../layouts/RootLayout';
 import App from '../pages/App';
 import ChatRoomPage from '../pages/ChatRoomPage';
+import ErrorPage from '../pages/ErrorPage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import PrivateRoutes from './PrivateRoutes';
@@ -10,12 +12,12 @@ import ProtectedRoutes from './ProtectedRoutes';
 const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <RootLayout />,
-		errorElement: (
-			<div className='flex justify-center text-center font-bold text-4xl mt-10'>
-				صفحه مورد نظر یافت نشد (404)
-			</div>
+		element: (
+			<ErrorBoundary>
+				<RootLayout />
+			</ErrorBoundary>
 		),
+		errorElement: <ErrorPage error={null} />,
 		children: [
 			{ index: true, element: <App /> },
 			{ path: 'login', element: <LoginPage /> },
@@ -24,7 +26,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/chat-room',
-		element: <PrivateRoutes />,
+		element: (
+			<ErrorBoundary>
+				<PrivateRoutes />
+			</ErrorBoundary>
+		),
 		children: [{ index: true, element: <ChatRoomPage /> }]
 	}
 ]);
