@@ -59,7 +59,8 @@ const PrivateChat = () => {
 		// * Listen for new private messages
 		newSocket.on('privateMessage', (msg: Message) => {
 			setMessages((prevMessages) => [...prevMessages, msg]);
-			// Scroll to the bottom whenever a new message arrives
+
+			// * Scroll to the bottom whenever a new message arrives
 			messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 		});
 
