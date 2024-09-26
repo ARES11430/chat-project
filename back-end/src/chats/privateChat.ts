@@ -1,20 +1,12 @@
-import axios from 'axios';
 import { Server, Socket } from 'socket.io';
 import { PrivateChat } from '../models/privateChat';
 import { User } from '../models/user';
-
-type CreateChatPayload = {
-	userId1: string;
-	userId2: string;
-};
 
 type PrivateChatMessage = {
 	roomId: string;
 	senderId: string;
 	message: string;
 };
-
-const BACK_END_ENDPOINT = process.env.BACK_END_URL;
 
 export const privateChatHandler = (io: Server, socket: Socket) => {
 	console.log('User connected to private chat:', socket.id);
