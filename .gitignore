@@ -13,3 +13,7 @@ back-end/.env
 /front-end/.env
 back-end/.env
 Developer Details.txt
+
+CachedData/
+
+CachedProfilesData/
