@@ -2,7 +2,7 @@ services:
   backend:
     build: ./back-end
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - ENV=development
       - PORT=3000
@@ -11,34 +11,46 @@ services:
       - DB_FALLBACK=mongodb://db:27017/chat_app_fallback
       - ACCESS_TOKEN_SECRET=fasdtwert35423452345
       - REFRESH_TOKEN_SECRET=ser34534asdtwert3542645t3452345
-      - FRONT_URL=http://frontend:4173
-      - BACK_END_URL=http://backend:3000/api/v1/
+      - FRONT_URL=http://192.168.26.53:4173 # Change this to use service name
+      - BACK_END_URL=http://192.168.26.53:3000/api/v1/
     networks:
       - chat-network
 
   frontend:
     build: ./front-end
     ports:
-      - "4173:4173"
+      - '4173:4173'
     environment:
-      - VITE_BACK_END_URL=http://backend:3000/api/v1/
-      - VITE_BACK_END_SOCKET=http://backend:3000
+      - VITE_BACK_END_URL=http://192.168.26.53:3000/api/v1/
+      - VITE_BACK_END_SOCKET=http://192.168.26.53:3000
       - VITE_CRYPTO_SECRET_KEY=wer3423f523423rfewt456!%^
     networks:
       - chat-network
 
+  nginx:
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - /home/ghasemi/nginx-config/frontend.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - chat-network # Ensure nginx is on the same network as frontend and backend
+
   db:
     image: mongo:latest
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongo-data:/data/db
     networks:
       - chat-network
 
-volumes:
-  mongo-data:
-
 networks:
   chat-network:
     driver: bridge
+
+volumes:
+  mongo-data:
