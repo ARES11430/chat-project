@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { ChatMediator } from '../chats/chatMediator';
-import { publicChatHandler } from './../chats/publicChat';
+import { publicChatHandler } from '../chats/publicChatHandler';
 import { privateChatHandler } from '../chats/privateChat';
 
 export const initSocket = (server: any) => {
