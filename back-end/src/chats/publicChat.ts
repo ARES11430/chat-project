@@ -26,9 +26,17 @@ class Client {
 
 // Mediator pattern: handling of chat logic with classes
 class PublicChatMediator {
+  private static instance: PublicChatMediator;
   private clients: Client[] = [];
 
-  constructor(private io: Server) {}
+  private constructor(private io: Server) {}
+
+  static getInstance(io: Server): PublicChatMediator {
+    if (!PublicChatMediator.instance) {
+      PublicChatMediator.instance = new PublicChatMediator(io);
+    }
+    return PublicChatMediator.instance;
+  }
 
   addClient(client: Client) {
     this.clients.push(client);
@@ -99,7 +107,7 @@ class PublicChatMediator {
 }
 
 export const publicChatHandler = (io: Server, socket: Socket) => {
-  const chatMediator = new PublicChatMediator(io);
+  const chatMediator = PublicChatMediator.getInstance(io);
   const client = new Client(socket);
 
   chatMediator.addClient(client);

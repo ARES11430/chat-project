@@ -19,9 +19,17 @@ class Client {
 
 // Mediator pattern: handling private chat logic
 class PrivateChatMediator {
+  private static instance: PrivateChatMediator;
   private clients: Map<string, Client[]> = new Map();
 
-  constructor(private io: Server) {}
+  private constructor(private io: Server) {}
+
+  static getInstance(io: Server): PrivateChatMediator {
+    if (!PrivateChatMediator.instance) {
+      PrivateChatMediator.instance = new PrivateChatMediator(io);
+    }
+    return PrivateChatMediator.instance;
+  }
 
   addClient(roomId: string, client: Client) {
     if (!this.clients.has(roomId)) {
@@ -104,7 +112,7 @@ class PrivateChatMediator {
 }
 
 export const privateChatHandler = (io: Server, socket: Socket) => {
-  const chatMediator = new PrivateChatMediator(io);
+  const chatMediator = PrivateChatMediator.getInstance(io);
   const client = new Client(socket);
 
   socket.on('joinPrivateChat', (roomId: string) => {
