@@ -1,8 +1,7 @@
 import { Server } from 'socket.io';
+import { ChatMediator } from '../chats/chatMediator';
 import { publicChatHandler } from './../chats/publicChat';
-import { privateChatHandler } from './../chats/privateChat';
-
-const frontURL = process.env.FRONT_URL;
+import { privateChatHandler } from '../chats/privateChat';
 
 export const initSocket = (server: any) => {
   const io = new Server(server, {
@@ -12,17 +11,12 @@ export const initSocket = (server: any) => {
     },
   });
 
+  const chatMediator = ChatMediator.init(io);
+
   io.on('connection', (socket) => {
-    console.log('User connected:', socket.id);
-
-    // * Public chat handlers
-    publicChatHandler(io, socket);
-
-    // * Private chat handlers
-    privateChatHandler(io, socket);
-
-    socket.on('disconnect', () => {
-      console.log('User disconnected:', socket.id);
-    });
+    chatMediator.registerHandlers(socket, [
+      publicChatHandler,
+      privateChatHandler,
+    ]);
   });
 };
