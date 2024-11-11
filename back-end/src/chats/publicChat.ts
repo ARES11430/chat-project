@@ -1,6 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { Message } from '../models/message';
 import { User } from '../models/user';
+import { Client } from './client';
 
 type ChatMessage = {
   id: string;
@@ -14,15 +15,6 @@ type UserType = {
 };
 
 const onlineUsers: UserType[] = [];
-
-// Observer pattern: Clients are observers listening for updates
-class Client {
-  constructor(public socket: Socket) {}
-
-  sendMessage(event: string, data: any) {
-    this.socket.emit(event, data);
-  }
-}
 
 // Mediator pattern: handling of chat logic with classes
 class PublicChatMediator {

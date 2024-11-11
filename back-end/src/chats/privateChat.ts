@@ -1,21 +1,13 @@
 import { Server, Socket } from 'socket.io';
 import { PrivateChat } from '../models/privateChat';
 import { User } from '../models/user';
+import { Client } from './client';
 
 type PrivateChatMessage = {
   roomId: string;
   senderId: string;
   message: string;
 };
-
-// Observer pattern: Clients are observers listening for updates
-class Client {
-  constructor(public socket: Socket) {}
-
-  sendMessage(event: string, data: any) {
-    this.socket.emit(event, data);
-  }
-}
 
 // Mediator pattern: handling private chat logic
 class PrivateChatMediator {
