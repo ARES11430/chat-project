@@ -1,0 +1,23 @@
+# Use Node.js version 23 as the base image
+FROM node:23
+
+# Set the working directory inside the container
+WORKDIR /usr/src/chat-app/frontend
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the frontend source code
+COPY . .
+
+# Build the TypeScript code
+RUN npm run build
+
+# Expose the port that Vite preview will use
+EXPOSE 4173
+
+# Serve the production build using Vite preview
+CMD ["npm", "run", "preview"]

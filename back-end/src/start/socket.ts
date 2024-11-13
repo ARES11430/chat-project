@@ -1,28 +1,22 @@
 import { Server } from 'socket.io';
-import { publicChatHandler } from './../chats/publicChat';
-import { privateChatHandler } from './../chats/privateChat';
-
-const frontURL = process.env.FRONT_URL;
+import { ChatMediator } from '../chats/chatMediator';
+import { publicChatHandler } from '../chats/publicChatHandler';
+import { privateChatHandler } from '../chats/privateChat';
 
 export const initSocket = (server: any) => {
-	const io = new Server(server, {
-		cors: {
-			origin: frontURL!,
-			credentials: true
-		}
-	});
+  const io = new Server(server, {
+    cors: {
+      origin: '*',
+      credentials: true,
+    },
+  });
 
-	io.on('connection', (socket) => {
-		console.log('User connected:', socket.id);
+  const chatMediator = ChatMediator.init(io);
 
-		// * Public chat handlers
-		publicChatHandler(io, socket);
-
-		// * Private chat handlers
-		privateChatHandler(io, socket);
-
-		socket.on('disconnect', () => {
-			console.log('User disconnected:', socket.id);
-		});
-	});
+  io.on('connection', (socket) => {
+    chatMediator.registerHandlers(socket, [
+      publicChatHandler,
+      privateChatHandler,
+    ]);
+  });
 };
